@@ -44,7 +44,8 @@ Otherwise follow directions below.
 
  * librdkafka - https://github.com/edenhill/librdkafka
  * libyajl (for JSON support, optional)
- * libavro and libserdes (for Avro support, optional. See https://github.com/confluentinc/libserdes)
+ * libavro, libserdes, libjansson, libcurl (for Avro support, optional. See https://github.com/confluentinc/libserdes)
+ ** libserdes will have to be installed manually and depends on intall avro-c and avro-cpp
 
 On Ubuntu or Debian: `sudo apt-get install librdkafka-dev libyajl-dev`
 
@@ -83,6 +84,9 @@ Read messages from Kafka 'syslog' topic, print to stdout
 
     $ kafkacat -b mybroker -t syslog
 
+Read messages Kafka 'data.avro' topic using registry (localhost) to deserialize it
+
+    $ kafkacat -C -b mybroker -t data.avro -A -a -s http://localhost:8081
 
 Produce messages from file (one file is one message)
 

@@ -5,7 +5,7 @@ mkl_require good_cflags
 mkl_require gitversion as KAFKACAT_VERSION default 1.3.1
 
 
-function checks {
+ function checks {
 
     # Check that librdkafka is available, and allow to link it statically.
     mkl_meta_set "rdkafka" "desc" "librdkafka is available at http://github.com/edenhill/librdkafka. To quickly download all dependencies and build kafkacat try ./bootstrap.sh"
@@ -52,15 +52,18 @@ struct rd_kafka_metadata foo;"
         mkl_lib_check --static=-ljansson "jansson" HAVE_JANSSON disable CC "" \
         "#include <jansson.h>
 " && \
-        mkl_lib_check --static=-lserdes "serdes" HAVE_SERDES disable CC "tmp-bootstrap/usr/local/lib/libavro.a" \
+        mkl_lib_check --static=-lserdes "serdes" HAVE_SERDES disable CC "-lavro" \
         "#include <sys/types.h>
         #include  <stdlib.h>
         #include  <libserdes/serdes-avro.h>
 " && \
-        mkl_lib_check --static=-lavro "avro" HAVE_AVRO disable CC "tmp-bootstrap/usr/local/lib/libserdes.a" \
+        mkl_lib_check --static=-lavro "avro" HAVE_AVRO disable CC "-lserdes" \
         "#include <sys/types.h>
         #include  <stdlib.h>
         #include  <libserdes/serdes-avro.h>
+" && \
+        mkl_lib_check --static=-lcurl "curl" HAVE_CURL disable CC "-lcurl" \
+        "#include <curl/curl.h>
 "
     then
         mkl_allvar_set "avro" ENABLE_AVRO y
